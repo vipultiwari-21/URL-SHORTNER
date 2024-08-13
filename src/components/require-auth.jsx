@@ -1,0 +1,25 @@
+// if user is not logged in it can't go to dashboard 👇
+
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { UrlState } from "@/context";
+import { BarLoader } from "react-spinners";
+
+
+function RequireAuth({children}) {
+    const navigate = useNavigate();
+    const {loading, isAuthenticated} = UrlState();
+
+    useEffect(() => {
+        if(!isAuthenticated && loading === false) navigate("/auth");
+    }, [isAuthenticated, loading]);
+
+    if(loading) return <BarLoader width={"100%"} color ="#36d7b7" />;
+    
+    if(isAuthenticated) return children; // means if user is authenticated the user will go to dashboard 
+}
+
+export default RequireAuth;
+
+
+// if user is not authenticated and loading is false direct the user to auth 
